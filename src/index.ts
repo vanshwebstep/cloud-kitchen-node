@@ -4,8 +4,8 @@ import os from 'os';
 import dotenv from 'dotenv';
 import express, { Application } from 'express';
 import cors from 'cors';
-import routes from './routes/v1/index';
-import debugHelper from './core/helpers/debug';
+import routes from './routes/v1/index.js';
+import debugHelper from './core/helpers/debug.js';
 
 dotenv.config();
 
