@@ -1,0 +1,39 @@
+node_modules/
+dist/
+build/
+
+# dotenv
+.env
+.env.*
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Prisma generated artifacts and migrations
+prisma/generated/
+prisma/migrations/
+
+# Uploads
+uploads/
+
+# TypeScript
+*.tsbuildinfo
+
+# Misc
+.cache/
+coverage/
+/.nyc_output/
+node_modules
+# Keep environment variables out of version control
+.env
+
+/generated/prisma
