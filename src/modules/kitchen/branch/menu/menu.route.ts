@@ -6,7 +6,7 @@ import {
     validateUpdateMenuItem,
     validateMenuItemId,
     validateMenuItemStatus
-} from './menu.validation';
+} from './menu.validation.js';
 
 const router = Router({
     mergeParams: true
