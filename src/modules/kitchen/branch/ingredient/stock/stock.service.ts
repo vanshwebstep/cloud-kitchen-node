@@ -1,7 +1,7 @@
-import { prisma } from '../../../../../../lib/prisma';
-import DebugHelper from '../../../../../core/helpers/debug';
-import stringHelper from '../../../../../core/helpers/string.helper';
-import stockRepo from './stock.repository';
+import { prisma } from '../../../../../../lib/prisma.js';
+import DebugHelper from '../../../../../core/helpers/debug.js';
+import stringHelper from '../../../../../core/helpers/string.helper.js';
+import stockRepo from './stock.repository.js';
 
 // =====================================================
 // 📦 CREATE STOCK

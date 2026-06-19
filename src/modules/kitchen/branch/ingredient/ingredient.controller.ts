@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import * as IngredientService from './ingredient.service';
-import * as BranchService from '../branch.service';
-import debugHelper from '../../../../core/helpers/debug';
+import * as IngredientService from './ingredient.service.js';
+import * as BranchService from '../branch.service.js';
+import debugHelper from '../../../../core/helpers/debug.js';
 
 // =====================================================
 // ✅ CREATE INGREDIENT

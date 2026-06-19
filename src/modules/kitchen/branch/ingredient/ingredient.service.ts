@@ -1,9 +1,9 @@
-import DebugHelper from '../../../../core/helpers/debug';
-import { Status, Unit } from '../../../../../prisma/generated/prisma/client';
-import { prisma } from '../../../../../lib/prisma';
-import stringHelper from '../../../../core/helpers/string.helper';
-import ingredientRepo from './ingredient.repository';
-import debugHelper from '../../../../core/helpers/debug';
+import DebugHelper from '../../../../core/helpers/debug.js';
+import { Status, Unit } from '../../../../../prisma/generated/prisma/client.js';
+import { prisma } from '../../../../../lib/prisma.js';
+import stringHelper from '../../../../core/helpers/string.helper.js';
+import ingredientRepo from './ingredient.repository.js';
+import debugHelper from '../../../../core/helpers/debug.js';
 
 // =====================================================
 // ✅ CREATE INGREDIENT

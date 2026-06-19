@@ -1,8 +1,8 @@
-import DebugHelper from '../../../core/helpers/debug';
-import branchRepo from './branch.repository';
-import { Status } from '../../../../prisma/generated/prisma/client';
-import { prisma } from '../../../../lib/prisma';
-import stringHelper from '../../../core/helpers/string.helper';
+import DebugHelper from '../../../core/helpers/debug.js';
+import branchRepo from './branch.repository.js';
+import { Status } from '../../../../prisma/generated/prisma/client.js';
+import { prisma } from '../../../../lib/prisma.js';
+import stringHelper from '../../../core/helpers/string.helper.js';
 
 // =====================================================
 // ✅ CREATE BRANCH

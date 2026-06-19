@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import * as IngredientController from './ingredient.controller';
-import { verifyToken } from '../../auth/auth.middleware';
-import { validateCreateIngredient } from './ingredient.validation';
-import stockRoutes from './stock/stock.route';
+import * as IngredientController from './ingredient.controller.js';
+import { verifyToken } from '../../auth/auth.middleware.js';
+import { validateCreateIngredient } from './ingredient.validation.js';
+import stockRoutes from './stock/stock.route.js';
 
 const router = Router({
     mergeParams: true

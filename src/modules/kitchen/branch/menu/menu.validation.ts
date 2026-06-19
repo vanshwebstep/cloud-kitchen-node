@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { Request, Response, NextFunction } from 'express';
-import { Status } from '../../../../../prisma/generated/prisma/client';
+import { Status } from '../../../../../prisma/generated/prisma/client.js';
 
 // ===============================================
 // 🏷️ CATEGORY / SUBCATEGORY SCHEMA

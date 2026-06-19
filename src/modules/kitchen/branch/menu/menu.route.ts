@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import * as MenuItemController from './menu.controller';
-import { verifyToken } from '../../auth/auth.middleware';
+import * as MenuItemController from './menu.controller.js';
+import { verifyToken } from '../../auth/auth.middleware.js';
 import {
     validateCreateMenuItem,
     validateUpdateMenuItem,

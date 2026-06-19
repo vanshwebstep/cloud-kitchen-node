@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import * as StockController from './stock.controller';
-import { verifyToken } from '../../../auth/auth.middleware';
-import { validateCreateStock } from './stock.validation';
+import * as StockController from './stock.controller.js';
+import { verifyToken } from '../../../auth/auth.middleware.js';
+import { validateCreateStock } from './stock.validation.js';
 
 const router = Router({
     mergeParams: true

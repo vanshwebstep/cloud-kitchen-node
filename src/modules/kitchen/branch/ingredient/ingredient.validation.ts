@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { Request, Response, NextFunction } from 'express';
-import { Unit } from '../../../../../prisma/generated/prisma/client';
+import { Unit } from '../../../../../prisma/generated/prisma/client.js';
 
 // ===============================================
 // 🥬 INGREDIENT SCHEMA

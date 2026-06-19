@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import * as BranchController from './branch.controller';
-import { verifyToken } from '../auth/auth.middleware';
-import ingredientRoutes from './ingredient/ingredient.route';
-import menuRoutes from './menu/menu.route';
+import * as BranchController from './branch.controller.js';
+import { verifyToken } from '../auth/auth.middleware.js';
+import ingredientRoutes from './ingredient/ingredient.route.js';
+import menuRoutes from './menu/menu.route.js';
 import {
     validateCreateBranch,
     validateUpdateBranch,

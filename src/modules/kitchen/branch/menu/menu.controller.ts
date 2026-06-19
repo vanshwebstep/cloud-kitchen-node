@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import * as MenuItemService from './menu.service';
-import * as BranchService from '../branch.service';
-import debugHelper from '../../../../core/helpers/debug';
-import menuItemRepo from './menu.repository';
-import menuCategoryRepo from '../../../shared/menu/category.repository';
-import branchIngredientInventoryRepo from '../ingredient/ingredient.repository';
+import * as MenuItemService from './menu.service.js';
+import * as BranchService from '../branch.service.js';
+import debugHelper from '../../../../core/helpers/debug.js';
+import menuItemRepo from './menu.repository.js';
+import menuCategoryRepo from '../../../shared/menu/category.repository.js';
+import branchIngredientInventoryRepo from '../ingredient/ingredient.repository.js';
 
 // =====================================================
 // ✅ CREATE MENU
