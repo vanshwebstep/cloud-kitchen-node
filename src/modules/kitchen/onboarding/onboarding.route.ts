@@ -1,9 +1,9 @@
 // src/modules/admin/onboarding/index.ts
 
 import { Router } from 'express';
-import * as OnboardingController from './onboarding.controller';
-import { verifyToken } from '../auth/auth.middleware';
-import { validateOnboarding } from './onboarding.validation';
+import * as OnboardingController from './onboarding.controller.js';
+import { verifyToken } from '../auth/auth.middleware.js';
+import { validateOnboarding } from './onboarding.validation.js';
 import multer from 'multer';
 
 const router = Router({

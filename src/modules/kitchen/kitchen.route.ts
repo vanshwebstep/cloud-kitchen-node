@@ -1,10 +1,10 @@
 // src/modules/admin/index.ts
 
 import { Router } from 'express';
-import authRoutes from './auth/auth.route';
-import onboardingRoutes from './onboarding/onboarding.route';
-import subscriptionRoutes from './subscription/subscription.route';
-import branchRoutes from './branch/branch.route';
+import authRoutes from './auth/auth.route.js';
+import onboardingRoutes from './onboarding/onboarding.route.js';
+import subscriptionRoutes from './subscription/subscription.route.js';
+import branchRoutes from './branch/branch.route.js';
 
 const router = Router({
     mergeParams: true

@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import { Request, Response, NextFunction } from 'express';
-import debugHelper from '../../../core/helpers/debug';
+import debugHelper from '../../../core/helpers/debug.js';
 
 // ==============================
 // 📦 HELPERS

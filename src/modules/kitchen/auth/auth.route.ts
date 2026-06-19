@@ -2,8 +2,8 @@
 
 import { Router } from 'express';
 import multer from 'multer';
-import * as AuthController from './auth.controller';
-import { verifyToken } from './auth.middleware';
+import * as AuthController from './auth.controller.js';
+import { verifyToken } from './auth.middleware.js';
 import {
     validateLogin,
     validateRegister,

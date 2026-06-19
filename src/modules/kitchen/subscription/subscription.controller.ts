@@ -1,8 +1,8 @@
 // src/modules/kitchen/subscription/subscription.controller.ts
 
 import { Request, Response } from 'express';
-import { debug, debugError, debugWarn } from '../../../core/helpers/debug';
-import { listPlansService, selectPlanService } from './subscription.service';
+import { debug, debugError, debugWarn } from '../../../core/helpers/debug.js';
+import { listPlansService, selectPlanService } from './subscription.service.js';
 
 export const listPlans = async (_req: Request, res: Response) => {
     debug('=== LIST PLANS START ===');

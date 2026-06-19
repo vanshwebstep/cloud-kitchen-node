@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import userRepo from '../../shared/user/user.repository';
-import { UserType } from '../../../../prisma/generated/prisma/client';
-import debugHelper from '../../../core/helpers/debug';
+import userRepo from '../../shared/user/user.repository.js';
+import { UserType } from '../../../../prisma/generated/prisma/client.js';
+import debugHelper from '../../../core/helpers/debug.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_super_secret_key';
 

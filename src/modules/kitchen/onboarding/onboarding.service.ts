@@ -1,9 +1,9 @@
 // src/modules/kitchen/onboarding/onboarding.service.ts
 
-import { DocumentType, UserType } from '../../../../prisma/generated/prisma/client';
-import kitchenDocumentRepo from '../kitchenDocument.repository';
-import userRepo from '../../shared/user/user.repository';
-import debugHelper from '../../../core/helpers/debug';
+import { DocumentType, UserType } from '../../../../prisma/generated/prisma/client.js';
+import kitchenDocumentRepo from '../kitchenDocument.repository.js';
+import userRepo from '../../shared/user/user.repository.js';
+import debugHelper from '../../../core/helpers/debug.js';
 
 interface OnboardingData {
     kitchenId: bigint;

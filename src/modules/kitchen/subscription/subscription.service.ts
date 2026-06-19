@@ -1,9 +1,9 @@
 // src/modules/kitchen/subscription/subscription.service.ts
 
-import { BillingCycle } from '../../../../prisma/generated/prisma/client';
-import subscriptionRepo from '../../shared/subscription/subscription.repository';
-import kitchenSubscriptionRepo from '../../shared/subscription/kitchenSubscription.repository';
-import { debug, debugError } from '../../../core/helpers/debug';
+import { BillingCycle } from '../../../../prisma/generated/prisma/client.js';
+import subscriptionRepo from '../../shared/subscription/subscription.repository.js';
+import kitchenSubscriptionRepo from '../../shared/subscription/kitchenSubscription.repository.js';
+import { debug, debugError } from '../../../core/helpers/debug.js';
 
 interface SelectPlanData {
     kitchenId: number;

@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import { formatBytes } from '../../core/helpers/formatBytes.helper';
-
+import { formatBytes } from '../../core/helpers/formatBytes.helper.js';
 export const getHealth = (req: Request, res: Response) => {
     res.status(200).json({
         status: 'UP',
