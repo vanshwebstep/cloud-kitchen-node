@@ -8,7 +8,7 @@ import {
     validateUpdateBranch,
     validateBranchId,
     validateBranchStatus
-} from './branch.validation';
+} from './branch.validation.js';
 
 const router = Router({
     mergeParams: true
