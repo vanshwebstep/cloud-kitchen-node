@@ -1,5 +1,5 @@
-import { debug, debugError } from '../../../core/helpers/debug';
-import cuisineRepo from './cuisine.repository';
+import { debug, debugError } from '../../../core/helpers/debug.js';
+import cuisineRepo from './cuisine.repository.js';
 
 // =====================================================
 // 📄 GET ALL BRANCHES

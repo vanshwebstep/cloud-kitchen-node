@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import * as CuisineController from './cuisine.controller';
-import { validateGetCuisines } from './cuisine.validation';
+import * as CuisineController from './cuisine.controller.js';
+import { validateGetCuisines } from './cuisine.validation.js';
 
 const router = Router({
     mergeParams: true

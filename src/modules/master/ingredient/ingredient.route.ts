@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import * as IngredienteController from './ingredient.controller';
-import { validateGetIngredientes } from './ingredient.validation';
+import * as IngredienteController from './ingredient.controller.js';
+import { validateGetIngredientes } from './ingredient.validation.js';
 
 const router = Router({
     mergeParams: true
