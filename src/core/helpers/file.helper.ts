@@ -3,7 +3,7 @@
 import fs from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
-import { debug, debugError } from "./debug";
+import { debug, debugError } from "./debug.js";
 
 interface SaveFileOptions {
     destination: string;
