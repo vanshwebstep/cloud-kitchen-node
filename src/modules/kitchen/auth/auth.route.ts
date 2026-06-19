@@ -9,7 +9,7 @@ import {
     validateRegister,
     validateForgotPassword,
     validateResetPassword
-} from './auth.validation';
+} from './auth.validation.js';
 
 const router = Router({
     mergeParams: true
