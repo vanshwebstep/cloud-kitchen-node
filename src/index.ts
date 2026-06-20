@@ -4,28 +4,49 @@ import os from 'os';
 import dotenv from 'dotenv';
 import express, { Application } from 'express';
 import cors from 'cors';
-import routes from './routes/v1/index.js';
-import debugHelper from './core/helpers/debug.js';
+import routes from './routes/v1/index';
+import debugHelper from './core/helpers/debug';
 
 dotenv.config();
 
 const SERVER_PORT = Number(process.env.PORT) || 3000;
 const ENV = process.env.NODE_ENV || 'development';
 const NUM_CLUSTERS = Number(process.env.CLUSTERS) || os.cpus().length;
-const allowedOrigins = (process.env.CORS_ORIGIN || 'http://127.0.0.1:5173,http://localhost:5173')
-    .split(',')
-    .map(origin => origin.trim())
-    .filter(Boolean);
+const rawCors = process.env.CORS_ORIGIN || process.env.APP_URL || 'http://127.0.0.1:5173,http://localhost:5173';
+const allowAllOrigins = rawCors.trim() === '*';
+const normalizeOrigin = (value: string | undefined): string | null => {
+    if (!value) return null;
+
+    const trimmed = value.trim().replace(/\/+$/, '');
+    if (!trimmed) return null;
+
+    try {
+        return new URL(trimmed).origin;
+    } catch {
+        return trimmed;
+    }
+};
+const allowedOrigins = allowAllOrigins
+    ? []
+    : rawCors
+        .split(',')
+        .map(origin => normalizeOrigin(origin))
+        .filter((origin): origin is string => Boolean(origin));
 
 const corsOptions = {
     origin(origin: string | undefined, callback: (error: Error | null, allow?: boolean) => void) {
-        const isLocalDevOrigin = !!origin && /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin);
+        // Log incoming origin for debugging
+        debugHelper.debug('CORS request origin:', origin);
 
-        if (!origin || allowedOrigins.includes(origin) || isLocalDevOrigin) {
+        const requestOrigin = normalizeOrigin(origin);
+        const isLocalDevOrigin = !!requestOrigin && /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(requestOrigin);
+
+        if (!requestOrigin || allowAllOrigins || allowedOrigins.includes(requestOrigin) || isLocalDevOrigin) {
             callback(null, true);
             return;
         }
 
+        debugHelper.debug(`CORS blocked origin: ${requestOrigin}. Allowed origins: ${allowedOrigins.join(', ')}`);
         callback(new Error(`CORS blocked origin: ${origin}`));
     },
     credentials: true

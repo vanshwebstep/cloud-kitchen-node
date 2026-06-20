@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { Request, Response, NextFunction } from 'express';
-import { debugWarn } from '../../../core/helpers/debug.js';
+import { debugWarn } from '../../../core/helpers/debug';
 
 // ==============================
 // 📦 HELPERS

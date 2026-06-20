@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import * as BranchService from './branch.service.js';
-import debugHelper from '../../../core/helpers/debug.js';
-import cityRepo from '../../shared/location/city.repository.js';
-import stateRepo from '../../shared/location/state.repository.js';
-import countryRepo from '../../shared/location/country.repository.js';
-import branchRepo from './branch.repository.js';
+import * as BranchService from './branch.service';
+import debugHelper from '../../../core/helpers/debug';
+import cityRepo from '../../shared/location/city.repository';
+import stateRepo from '../../shared/location/state.repository';
+import countryRepo from '../../shared/location/country.repository';
+import branchRepo from './branch.repository';
 
 // =====================================================
 // ✅ CREATE BRANCH

@@ -1,5 +1,5 @@
-import { debug, debugError } from '../../../core/helpers/debug.js';
-import ingredienteRepo from './ingredient.repository.js';
+import { debug, debugError } from '../../../core/helpers/debug';
+import ingredienteRepo from './ingredient.repository';
 
 // =====================================================
 // 📄 GET ALL BRANCHES

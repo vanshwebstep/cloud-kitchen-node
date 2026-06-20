@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import * as OnboardingService from './onboarding.service.js';
-import debugHelper from '../../../core/helpers/debug.js';
-import { saveFile } from '../../../core/helpers/file.helper.js';
+import * as OnboardingService from './onboarding.service';
+import debugHelper from '../../../core/helpers/debug';
+import { saveFile } from '../../../core/helpers/file.helper';
 
 export const completeOnboarding = async (req: Request, res: Response) => {
     debugHelper.debug(`=== CREATE BRAND START ===`);

@@ -1,14 +1,14 @@
 import { Router } from 'express';
-import * as BranchController from './branch.controller.js';
-import { verifyToken } from '../auth/auth.middleware.js';
-import ingredientRoutes from './ingredient/ingredient.route.js';
-import menuRoutes from './menu/menu.route.js';
+import * as BranchController from './branch.controller';
+import { verifyToken } from '../auth/auth.middleware';
+import ingredientRoutes from './ingredient/ingredient.route';
+import menuRoutes from './menu/menu.route';
 import {
     validateCreateBranch,
     validateUpdateBranch,
     validateBranchId,
     validateBranchStatus
-} from './branch.validation.js';
+} from './branch.validation';
 
 const router = Router({
     mergeParams: true

@@ -2,7 +2,8 @@
 
 import { Router, Request, Response } from 'express';
 // Assuming your folder structure is: src/modules/system/controller.ts
-import * as SystemController from './controller.js';
+import * as SystemController from './controller';
+
 const router: Router = Router();
 
 /**

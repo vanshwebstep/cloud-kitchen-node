@@ -2,10 +2,10 @@ import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 
 import { Request, Response } from 'express';
-import * as AuthService from './auth.service.js';
-import debugHelper from '../../../core/helpers/debug.js';
-import { saveFile } from '../../../core/helpers/file.helper.js';
-import userRepo from '../../shared/user/user.repository.js';
+import * as AuthService from './auth.service';
+import debugHelper from '../../../core/helpers/debug';
+import { saveFile } from '../../../core/helpers/file.helper';
+import userRepo from '../../shared/user/user.repository';
 
 export const login = async (req: Request, res: Response) => {
     debugHelper.debug('--- [Login Controller] Start ---');

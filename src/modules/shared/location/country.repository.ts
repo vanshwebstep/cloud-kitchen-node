@@ -1,7 +1,7 @@
 // src/modules/shared/location/country.repository.ts
 
-import { prisma, Prisma } from "../../../../lib/prisma.js";
-import stringHelper from "../../../core/helpers/string.helper.js";
+import { prisma, Prisma } from "../../../../lib/prisma";
+import stringHelper from "../../../core/helpers/string.helper";
 
 const countryRepo = {
   // ---------- Find Admin(Unique) ----------

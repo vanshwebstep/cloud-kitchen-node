@@ -1,10 +1,10 @@
 // src/modules/admin/index.ts
 
 import { Router } from 'express';
-import cuisineRoutes from './cuisine/cuisine.route.js';
-import ingredientRoutes from './ingredient/ingredient.route.js';
-import { prisma } from '../../../lib/prisma.js';
-import stringHelper from '../../core/helpers/string.helper.js';
+import cuisineRoutes from './cuisine/cuisine.route';
+import ingredientRoutes from './ingredient/ingredient.route';
+import { prisma } from '../../../lib/prisma';
+import stringHelper from '../../core/helpers/string.helper';
 
 const router = Router({
     mergeParams: true

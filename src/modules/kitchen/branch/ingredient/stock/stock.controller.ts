@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import * as StockService from './stock.service.js';
-import * as BranchService from '../../branch.service.js';
-import debugHelper from '../../../../../core/helpers/debug.js';
+import * as StockService from './stock.service';
+import * as BranchService from '../../branch.service';
+import debugHelper from '../../../../../core/helpers/debug';
 
 // =====================================================
 // 📦 CREATE STOCK

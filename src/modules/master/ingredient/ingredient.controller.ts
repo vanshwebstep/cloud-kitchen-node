@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import * as IngredienteService from './ingredient.service.js';
-import { debug, debugError } from '../../../core/helpers/debug.js';
+import * as IngredienteService from './ingredient.service';
+import { debug, debugError } from '../../../core/helpers/debug';
 
 // =====================================================
 // 📄 GET ALL BRANCHES

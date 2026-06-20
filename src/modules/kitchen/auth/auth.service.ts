@@ -2,9 +2,9 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
-import { User, UserType } from '../../../../prisma/generated/prisma/client.js';
-import userRepo from '../../shared/user/user.repository.js';
-import debugHelper from '../../../core/helpers/debug.js';
+import { User, UserType } from '../../../../prisma/generated/prisma/client';
+import userRepo from '../../shared/user/user.repository';
+import debugHelper from '../../../core/helpers/debug';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_super_secret_key';
 

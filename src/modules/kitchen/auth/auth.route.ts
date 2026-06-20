@@ -2,14 +2,14 @@
 
 import { Router } from 'express';
 import multer from 'multer';
-import * as AuthController from './auth.controller.js';
-import { verifyToken } from './auth.middleware.js';
+import * as AuthController from './auth.controller';
+import { verifyToken } from './auth.middleware';
 import {
     validateLogin,
     validateRegister,
     validateForgotPassword,
     validateResetPassword
-} from './auth.validation.js';
+} from './auth.validation';
 
 const router = Router({
     mergeParams: true

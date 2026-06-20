@@ -1,12 +1,12 @@
-import DebugHelper from '../../../../core/helpers/debug.js';
-import menuItemRepo from './menu.repository.js';
+import DebugHelper from '../../../../core/helpers/debug';
+import menuItemRepo from './menu.repository';
 import {
     Status
-} from '../../../../../prisma/generated/prisma/client.js';
+} from '../../../../../prisma/generated/prisma/client';
 
-import { prisma } from '../../../../../lib/prisma.js';
+import { prisma } from '../../../../../lib/prisma';
 
-import stringHelper from '../../../../core/helpers/string.helper.js';
+import stringHelper from '../../../../core/helpers/string.helper';
 
 // =====================================================
 // ✅ CREATE MENU

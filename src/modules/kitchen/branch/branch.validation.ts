@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { Request, Response, NextFunction } from 'express';
-import { Status } from '../../../../prisma/generated/prisma/client.js';
+import { Status } from '../../../../prisma/generated/prisma/client';
 
 // ===============================================
 // 🍽️ CUISINE SCHEMA

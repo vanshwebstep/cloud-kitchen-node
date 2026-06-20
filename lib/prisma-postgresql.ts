@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient, Prisma } from '../prisma/generated/prisma/client.js';
-import debugHelper from "../src/core/helpers/debug.js";
+import { PrismaClient, Prisma } from '../prisma/generated/prisma/client';
+import debugHelper from "../src/core/helpers/debug";
 
 /* -------------------------------- */
 /* ENV VARIABLES */

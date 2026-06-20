@@ -1,7 +1,7 @@
 // src/modules/admin/admin/admin.repository.ts
 
-import { prisma, Prisma } from "../../../../lib/prisma.js";
-import stringHelper from "../../../core/helpers/string.helper.js";
+import { prisma, Prisma } from "../../../../lib/prisma";
+import stringHelper from "../../../core/helpers/string.helper";
 
 const cuisineRepo = {
     // ---------- Find Admin(Unique) ----------

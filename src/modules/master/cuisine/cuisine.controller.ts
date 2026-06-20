@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import * as CuisineService from './cuisine.service.js';
-import { debugError } from '../../../core/helpers/debug.js';
+import * as CuisineService from './cuisine.service';
+import { debugError } from '../../../core/helpers/debug';
 import { debug } from 'node:console';
 
 // =====================================================
