@@ -36,10 +36,10 @@ const adapter = new PrismaMariaDb({
   user: env('DATABASE_USER'),
   password: env('DATABASE_PASSWORD'),
   database: env('DATABASE_NAME'),
-  connectTimeout: envNumber('DATABASE_CONNECT_TIMEOUT', 3000),
-  acquireTimeout: envNumber('DATABASE_CONNECT_TIMEOUT', 3000),
-  queryTimeout: envNumber('DATABASE_QUERY_TIMEOUT', 8000),
-  connectionLimit: 5
+  connectTimeout: envNumber('DATABASE_CONNECT_TIMEOUT', 15000),
+  acquireTimeout: envNumber('DATABASE_ACQUIRE_TIMEOUT', envNumber('DATABASE_CONNECT_TIMEOUT', 15000)),
+  queryTimeout: envNumber('DATABASE_QUERY_TIMEOUT', 30000),
+  connectionLimit: envNumber('DATABASE_CONNECTION_LIMIT', 5)
 });
 
 /* -------------------------------- */
