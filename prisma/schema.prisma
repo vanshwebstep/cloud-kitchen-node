@@ -160,6 +160,7 @@ model Ingredient {
 
   @@index([name])
   @@index([category])
+  @@map("ingredient")
 }
 
 model Cuisine {
@@ -178,6 +179,7 @@ model Cuisine {
   updatedAt DateTime @updatedAt
 
   @@index([name])
+  @@map("cuisine")
 }
 
 // ===============================================
@@ -217,6 +219,7 @@ model MenuCategory {
 
   // 🔥 prevent duplicate sub-category under same parent
   @@unique([parentId, name])
+  @@map("menucategory")
 }
 
 model Country {
@@ -234,6 +237,8 @@ model Country {
   cities          City[]   @relation("CountryToCity")
 
   branches        Branch[] @relation("BranchCountry")
+
+  @@map("country")
 }
 
 model State {
@@ -249,6 +254,7 @@ model State {
   branches    Branch[] @relation("BranchState")
 
   @@index([countryId])
+  @@map("state")
 }
 
 model City {
@@ -264,6 +270,7 @@ model City {
 
   @@index([stateId])
   @@index([countryId])
+  @@map("city")
 }
 
 // ===============================================
@@ -344,6 +351,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   @@index([rootId])
+  @@map("user")
 }
 
 // ===============================================
@@ -368,6 +376,7 @@ model KitchenDocument {
   updatedAt DateTime @updatedAt
 
   @@index([kitchenId])
+  @@map("kitchendocument")
 }
 
 // ===============================================
@@ -409,6 +418,8 @@ model emailConfig {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("emailconfig")
 }
 
 // ===============================================
@@ -432,6 +443,7 @@ model Role {
 
   @@unique([ownerId, name])
   @@index([ownerId])
+  @@map("role")
 }
 
 // ===============================================
@@ -452,6 +464,7 @@ model Permission {
   updatedAt DateTime @updatedAt
 
   @@unique([panel, module, action])
+  @@map("permission")
 }
 
 // ===============================================
@@ -469,6 +482,7 @@ model RoleHasPermission {
   createdAt DateTime @default(now())
 
   @@unique([roleId, permissionId])
+  @@map("rolehaspermission")
 }
 
 // ===============================================
@@ -495,6 +509,8 @@ model Subscription {
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+
+  @@map("subscription")
 }
 
 // ===============================================
@@ -510,6 +526,8 @@ model SubscriptionFeature {
   feature         String        // e.g. "Priority Support", "Analytics Dashboard"
 
   createdAt       DateTime @default(now())
+
+  @@map("subscriptionfeature")
 }
 
 // ===============================================
@@ -562,6 +580,7 @@ model KitchenSubscription {
   updatedAt DateTime @updatedAt
 
   @@index([kitchenId])
+  @@map("kitchensubscription")
 }
 
 // ===============================================
@@ -641,6 +660,7 @@ model Branch {
 
   // 🔥 Prevent duplicate branch names per user
   @@unique([userId, name])
+  @@map("branch")
 }
 
 model BranchCuisine {
@@ -657,6 +677,7 @@ model BranchCuisine {
   @@unique([branchId, cuisineId]) // duplicate mapping prevent
   @@index([branchId])
   @@index([cuisineId])
+  @@map("branchcuisine")
 }
 
 // ===============================================
@@ -674,6 +695,7 @@ model UserBranchAccess {
   createdAt DateTime @default(now())
 
   @@unique([userId, branchId])
+  @@map("userbranchaccess")
 }
 
 // ===============================================
@@ -692,6 +714,8 @@ model Integration {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("integration")
 }
 
 // ===============================================
@@ -730,6 +754,7 @@ model MenuItem {
   @@index([kitchenId, branchId])
   @@index([categoryId])
   @@index([subCategoryId])
+  @@map("menuitem")
 }
 
 // ===============================================
@@ -757,6 +782,7 @@ model BranchIngredientInventory {
   updatedAt DateTime @updatedAt
 
   @@index([kitchenId, branchId])
+  @@map("branchingredientinventory")
 }
 
 model InventoryStock {
@@ -773,6 +799,7 @@ model InventoryStock {
   createdAt       DateTime @default(now())
 
   @@index([inventoryItemId])
+  @@map("inventorystock")
 }
 
 // ===============================================
@@ -793,6 +820,7 @@ model MenuItemIngredient {
   updatedAt DateTime @updatedAt
 
   @@unique([menuItemId, inventoryItemId])
+  @@map("menuitemingredient")
 }
 
 // ===============================================
@@ -818,6 +846,7 @@ model Order {
   updatedAt DateTime @updatedAt
 
   @@index([userId, branchId])
+  @@map("order")
 }
 
 model OrderItem {
@@ -831,4 +860,6 @@ model OrderItem {
 
   quantity   Int
   price      Float
+
+  @@map("orderitem")
 }
