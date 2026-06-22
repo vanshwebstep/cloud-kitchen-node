@@ -1,6 +1,5 @@
 // src/index.ts
 import cluster from 'cluster';
-import os from 'os';
 import dotenv from 'dotenv';
 import express, { Application } from 'express';
 import cors from 'cors';
@@ -11,8 +10,14 @@ dotenv.config();
 
 const SERVER_PORT = Number(process.env.PORT) || 3000;
 const ENV = process.env.NODE_ENV || 'development';
-const NUM_CLUSTERS = Number(process.env.CLUSTERS) || os.cpus().length;
-const rawCors = process.env.CORS_ORIGIN || process.env.APP_URL || 'http://127.0.0.1:5173,http://localhost:5173';
+const parsePositiveInt = (value: string | undefined, fallback: number) => {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : fallback;
+};
+const requestedClusters = process.env.WEB_CONCURRENCY || process.env.CLUSTERS;
+const NUM_CLUSTERS = parsePositiveInt(requestedClusters, 1);
+const appUrl = process.env.APP_URL || process.env.RENDER_EXTERNAL_URL || 'https://cloud-kitchen-node-x2ok.onrender.com';
+const rawCors = process.env.CORS_ORIGIN || appUrl || 'http://127.0.0.1:5173,http://localhost:5173';
 const allowAllOrigins = rawCors.trim() === '*';
 const normalizeOrigin = (value: string | undefined): string | null => {
     if (!value) return null;
@@ -60,6 +65,7 @@ if (ENV === 'development' || NUM_CLUSTERS <= 1) {
     app.use('/api/v1', routes);
 
     app.listen(SERVER_PORT, () => {
+        console.log(`Server running on port ${SERVER_PORT}`);
         debugHelper.debug(`-----------------------------------------`);
         debugHelper.debug(`🚀 Server (DEV) running on http://localhost:${SERVER_PORT}/api/v1/hello`);
         debugHelper.debug(`🏥 Health Check: http://localhost:${SERVER_PORT}/api/v1/system/health`);
@@ -108,6 +114,7 @@ if (ENV === 'development' || NUM_CLUSTERS <= 1) {
     app.use('/api/v1', routes);
 
     const server = app.listen(SERVER_PORT, () => {
+        console.log(`Worker ${process.pid} running on port ${SERVER_PORT}`);
         debugHelper.debug(`-----------------------------------------`);
         debugHelper.debug(`🚀 Worker PID: ${process.pid} listening on http://localhost:${SERVER_PORT}/api/v1/hello`);
         debugHelper.debug(`🏥 Health Check: http://localhost:${SERVER_PORT}/api/v1/system/health`);
