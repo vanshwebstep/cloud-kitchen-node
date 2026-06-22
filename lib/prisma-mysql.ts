@@ -22,7 +22,12 @@ const globalForPrisma = globalThis as unknown as {
 /* DATABASE ADAPTER (supports DB_ENV/live) */
 /* -------------------------------- */
 
-const DB_ENV = process.env.DB_ENV || "local";
+const hasLiveDatabaseEnv = Boolean(
+  process.env.LIVE_DATABASE_HOST ||
+  process.env.LIVE_DATABASE_NAME ||
+  process.env.LIVE_DATABASE_USER
+);
+const DB_ENV = process.env.DB_ENV || (hasLiveDatabaseEnv ? "live" : "local");
 const isLive = DB_ENV === "live";
 const env = (key: string) => process.env[isLive ? `LIVE_${key}` : key] ?? process.env[key];
 const envNumber = (key: string, fallback: number) => {

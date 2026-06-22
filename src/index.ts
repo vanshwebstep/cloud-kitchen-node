@@ -16,6 +16,14 @@ const parsePositiveInt = (value: string | undefined, fallback: number) => {
 };
 const requestedClusters = process.env.WEB_CONCURRENCY || process.env.CLUSTERS;
 const NUM_CLUSTERS = parsePositiveInt(requestedClusters, 1);
+const hasLiveDatabaseEnv = Boolean(
+    process.env.LIVE_DATABASE_HOST ||
+    process.env.LIVE_DATABASE_NAME ||
+    process.env.LIVE_DATABASE_USER
+);
+const DB_ENV = process.env.DB_ENV || (hasLiveDatabaseEnv ? 'live' : 'local');
+const isLiveDb = DB_ENV === 'live';
+const dbEnv = (key: string) => process.env[isLiveDb ? `LIVE_${key}` : key] ?? process.env[key];
 const appUrl = process.env.APP_URL || process.env.RENDER_EXTERNAL_URL || 'https://cloud-kitchen-node-x2ok.onrender.com';
 const rawCors = process.env.CORS_ORIGIN || appUrl || 'http://127.0.0.1:5173,http://localhost:5173';
 const allowAllOrigins = rawCors.trim() === '*';
@@ -69,7 +77,7 @@ if (ENV === 'development' || NUM_CLUSTERS <= 1) {
         debugHelper.debug(`-----------------------------------------`);
         debugHelper.debug(`🚀 Server (DEV) running on http://localhost:${SERVER_PORT}/api/v1/hello`);
         debugHelper.debug(`🏥 Health Check: http://localhost:${SERVER_PORT}/api/v1/system/health`);
-        debugHelper.debug(`📂 DB Target   : ${process.env.DATABASE_NAME} (${process.env.DATABASE_HOST})`);
+        debugHelper.debug(`📂 DB Target   : ${dbEnv('DATABASE_NAME')} (${dbEnv('DATABASE_HOST')}) env=${DB_ENV}`);
         debugHelper.debug(`-----------------------------------------`);
     });
 
@@ -118,7 +126,7 @@ if (ENV === 'development' || NUM_CLUSTERS <= 1) {
         debugHelper.debug(`-----------------------------------------`);
         debugHelper.debug(`🚀 Worker PID: ${process.pid} listening on http://localhost:${SERVER_PORT}/api/v1/hello`);
         debugHelper.debug(`🏥 Health Check: http://localhost:${SERVER_PORT}/api/v1/system/health`);
-        debugHelper.debug(`📂 DB Target   : ${process.env.DATABASE_NAME} (${process.env.DATABASE_HOST})`);
+        debugHelper.debug(`📂 DB Target   : ${dbEnv('DATABASE_NAME')} (${dbEnv('DATABASE_HOST')}) env=${DB_ENV}`);
         debugHelper.debug(`-----------------------------------------`);
     });
 
