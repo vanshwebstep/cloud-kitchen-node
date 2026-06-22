@@ -62,7 +62,7 @@ if (ENV === 'development' || NUM_CLUSTERS <= 1) {
     app.listen(SERVER_PORT, () => {
         debugHelper.debug(`-----------------------------------------`);
         debugHelper.debug(`🚀 Server (DEV) running on http://localhost:${SERVER_PORT}/api/v1/hello`);
-        debugHelper.debug(`🏥 Health Check: http://localhost:${SERVER_PORT}/api/v1/health`);
+        debugHelper.debug(`🏥 Health Check: http://localhost:${SERVER_PORT}/api/v1/system/health`);
         debugHelper.debug(`📂 DB Target   : ${process.env.DATABASE_NAME} (${process.env.DATABASE_HOST})`);
         debugHelper.debug(`-----------------------------------------`);
     });
@@ -110,7 +110,7 @@ if (ENV === 'development' || NUM_CLUSTERS <= 1) {
     const server = app.listen(SERVER_PORT, () => {
         debugHelper.debug(`-----------------------------------------`);
         debugHelper.debug(`🚀 Worker PID: ${process.pid} listening on http://localhost:${SERVER_PORT}/api/v1/hello`);
-        debugHelper.debug(`🏥 Health Check: http://localhost:${SERVER_PORT}/api/v1/health`);
+        debugHelper.debug(`🏥 Health Check: http://localhost:${SERVER_PORT}/api/v1/system/health`);
         debugHelper.debug(`📂 DB Target   : ${process.env.DATABASE_NAME} (${process.env.DATABASE_HOST})`);
         debugHelper.debug(`-----------------------------------------`);
     });

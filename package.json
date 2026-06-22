@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/index.ts",
-    "build": "tsc -p tsconfig.json",
-    "start": "node dist/index.js"
+    "build": "prisma generate && tsc -p tsconfig.json",
+    "start": "tsx src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -28,7 +28,6 @@
     "nodemon": "^3.1.14",
     "prisma": "^7.8.0",
     "ts-node": "^10.9.2",
-    "tsx": "^4.21.0",
     "typescript": "^6.0.2"
   },
   "dependencies": {
@@ -48,6 +47,7 @@
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.1.1",
     "pg": "^8.20.0",
+    "tsx": "^4.21.0",
     "uuid": "^13.0.0",
     "zod": "^4.3.6"
   }

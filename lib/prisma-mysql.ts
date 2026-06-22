@@ -25,12 +25,20 @@ const globalForPrisma = globalThis as unknown as {
 const DB_ENV = process.env.DB_ENV || "local";
 const isLive = DB_ENV === "live";
 const env = (key: string) => process.env[isLive ? `LIVE_${key}` : key] ?? process.env[key];
+const envNumber = (key: string, fallback: number) => {
+  const value = Number(env(key));
+  return Number.isFinite(value) && value > 0 ? value : fallback;
+};
 
 const adapter = new PrismaMariaDb({
   host: env('DATABASE_HOST'),
+  port: envNumber('DATABASE_PORT', 3306),
   user: env('DATABASE_USER'),
   password: env('DATABASE_PASSWORD'),
   database: env('DATABASE_NAME'),
+  connectTimeout: envNumber('DATABASE_CONNECT_TIMEOUT', 3000),
+  acquireTimeout: envNumber('DATABASE_CONNECT_TIMEOUT', 3000),
+  queryTimeout: envNumber('DATABASE_QUERY_TIMEOUT', 8000),
   connectionLimit: 5
 });
 
