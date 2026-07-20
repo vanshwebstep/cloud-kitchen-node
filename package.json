@@ -2,13 +2,15 @@
   "name": "cloud-kitchen",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/index.ts",
     "postinstall": "prisma generate",
-    "build": "prisma generate && tsc -p tsconfig.json",
-    "start": "tsx src/index.ts"
+    "build": "prisma generate && npm run build:app",
+    "start": "node app.js",
+    "start:tsx": "tsx src/index.ts",
+    "build:app": "esbuild src/index.ts --bundle --platform=node --format=esm --target=node18 --packages=external --outfile=app.js"
   },
   "keywords": [],
   "author": "",
@@ -50,6 +52,7 @@
     "pg": "^8.20.0",
     "tsx": "^4.21.0",
     "uuid": "^13.0.0",
-    "zod": "^4.3.6"
+    "zod": "^4.3.6",
+    "esbuild": "^0.27.3"
   }
 }

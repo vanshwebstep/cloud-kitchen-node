@@ -2,6 +2,13 @@ import "dotenv/config";
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import { PrismaClient, Prisma } from '../prisma/generated/prisma/client';
 import debugHelper from "../src/core/helpers/debug";
+import {
+  DB_ENV,
+  getDatabaseEnv,
+  getDatabaseHost,
+  getDatabaseName,
+  getDatabasePort
+} from "../src/core/config/databaseEnv";
 
 /* -------------------------------- */
 /* ENV VARIABLES */
@@ -22,25 +29,17 @@ const globalForPrisma = globalThis as unknown as {
 /* DATABASE ADAPTER (supports DB_ENV/live) */
 /* -------------------------------- */
 
-const hasLiveDatabaseEnv = Boolean(
-  process.env.LIVE_DATABASE_HOST ||
-  process.env.LIVE_DATABASE_NAME ||
-  process.env.LIVE_DATABASE_USER
-);
-const DB_ENV = process.env.DB_ENV || (hasLiveDatabaseEnv ? "live" : "local");
-const isLive = DB_ENV === "live";
-const env = (key: string) => process.env[isLive ? `LIVE_${key}` : key] ?? process.env[key];
 const envNumber = (key: string, fallback: number) => {
-  const value = Number(env(key));
+  const value = Number(getDatabaseEnv(key));
   return Number.isFinite(value) && value > 0 ? value : fallback;
 };
 
 const adapter = new PrismaMariaDb({
-  host: env('DATABASE_HOST'),
-  port: envNumber('DATABASE_PORT', 3306),
-  user: env('DATABASE_USER'),
-  password: env('DATABASE_PASSWORD'),
-  database: env('DATABASE_NAME'),
+  host: getDatabaseHost(),
+  port: getDatabasePort(),
+  user: getDatabaseEnv('DATABASE_USER'),
+  password: getDatabaseEnv('DATABASE_PASSWORD'),
+  database: getDatabaseName(),
   connectTimeout: envNumber('DATABASE_CONNECT_TIMEOUT', 15000),
   acquireTimeout: envNumber('DATABASE_ACQUIRE_TIMEOUT', envNumber('DATABASE_CONNECT_TIMEOUT', 15000)),
   queryTimeout: envNumber('DATABASE_QUERY_TIMEOUT', 30000),
@@ -75,8 +74,8 @@ if (process.env.NODE_ENV !== "production") {
 
 if (APP_DEBUG) {
   debugHelper.debug("🚀 Prisma Client Initialized");
-  debugHelper.debug("📦 Database:", env('DATABASE_NAME'), `(env=${DB_ENV})`);
-  debugHelper.debug("🔗 Host:", env('DATABASE_HOST'));
+  debugHelper.debug("Database:", getDatabaseName(), `(env=${DB_ENV})`);
+  debugHelper.debug("Host:", `${getDatabaseHost()}:${getDatabasePort()}`);
   debugHelper.debug("🐛 Query Logs:", PRISMA_QUERY_LOG);
 }
 

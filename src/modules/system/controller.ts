@@ -1,14 +1,31 @@
 import { Request, Response } from 'express';
 import { formatBytes } from '../../core/helpers/formatBytes.helper';
+import { getDatabaseTarget } from '../../core/config/databaseEnv';
+import { prisma } from '../../../lib/prisma';
 
-export const getHealth = (req: Request, res: Response) => {
+export const getHealth = async (req: Request, res: Response) => {
+    const database = getDatabaseTarget();
+    let databaseStatus = 'Connected';
+    let databaseError: string | undefined;
+
+    try {
+        await prisma.$queryRaw`SELECT 1`;
+    } catch (error) {
+        databaseStatus = 'Disconnected';
+        databaseError = error instanceof Error ? error.message : 'Database connection failed';
+    }
+
     res.status(200).json({
-        status: 'UP',
+        status: databaseStatus === 'Connected' ? 'UP' : 'DOWN',
         uptime: process.uptime(),
         timestamp: new Date().toISOString(),
         database: {
-            host: process.env.DATABASE_HOST,
-            status: 'Connected' // Later, you can add real ping logic here
+            env: database.env,
+            host: database.host,
+            port: database.port,
+            name: database.database,
+            status: databaseStatus,
+            ...(databaseError ? { error: databaseError } : {})
         }
     });
 };

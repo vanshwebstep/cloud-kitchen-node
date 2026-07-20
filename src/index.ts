@@ -1,12 +1,12 @@
 // src/index.ts
 import cluster from 'cluster';
-import dotenv from 'dotenv';
+import 'dotenv/config';
 import express, { Application } from 'express';
 import cors from 'cors';
 import routes from './routes/v1/index';
 import debugHelper from './core/helpers/debug';
+import { DB_ENV, getDatabaseTarget } from './core/config/databaseEnv';
 
-dotenv.config();
 
 const SERVER_PORT = Number(process.env.PORT) || 3000;
 const ENV = process.env.NODE_ENV || 'development';
@@ -16,14 +16,6 @@ const parsePositiveInt = (value: string | undefined, fallback: number) => {
 };
 const requestedClusters = process.env.WEB_CONCURRENCY || process.env.CLUSTERS;
 const NUM_CLUSTERS = parsePositiveInt(requestedClusters, 1);
-const hasLiveDatabaseEnv = Boolean(
-    process.env.LIVE_DATABASE_HOST ||
-    process.env.LIVE_DATABASE_NAME ||
-    process.env.LIVE_DATABASE_USER
-);
-const DB_ENV = process.env.DB_ENV || (hasLiveDatabaseEnv ? 'live' : 'local');
-const isLiveDb = DB_ENV === 'live';
-const dbEnv = (key: string) => process.env[isLiveDb ? `LIVE_${key}` : key] ?? process.env[key];
 const appUrl = process.env.APP_URL || process.env.RENDER_EXTERNAL_URL || 'https://cloud-kitchen-node-x2ok.onrender.com';
 const rawCors = process.env.CORS_ORIGIN || appUrl || 'http://127.0.0.1:5173,http://localhost:5173';
 const allowAllOrigins = rawCors.trim() === '*';
@@ -75,9 +67,10 @@ if (ENV === 'development' || NUM_CLUSTERS <= 1) {
     app.listen(SERVER_PORT, () => {
         console.log(`Server running on port ${SERVER_PORT}`);
         debugHelper.debug(`-----------------------------------------`);
-        debugHelper.debug(`🚀 Server (DEV) running on http://localhost:${SERVER_PORT}/api/v1/hello`);
+        debugHelper.debug(`🚀 Server (DEV) running on http://localhost:${SERVER_PORT}/api/v1/system/hello`);
         debugHelper.debug(`🏥 Health Check: http://localhost:${SERVER_PORT}/api/v1/system/health`);
-        debugHelper.debug(`📂 DB Target   : ${dbEnv('DATABASE_NAME')} (${dbEnv('DATABASE_HOST')}) env=${DB_ENV}`);
+        const database = getDatabaseTarget();
+        debugHelper.debug(`DB Target   : ${database.database} (${database.host}:${database.port}) env=${DB_ENV}`);
         debugHelper.debug(`-----------------------------------------`);
     });
 
@@ -124,9 +117,10 @@ if (ENV === 'development' || NUM_CLUSTERS <= 1) {
     const server = app.listen(SERVER_PORT, () => {
         console.log(`Worker ${process.pid} running on port ${SERVER_PORT}`);
         debugHelper.debug(`-----------------------------------------`);
-        debugHelper.debug(`🚀 Worker PID: ${process.pid} listening on http://localhost:${SERVER_PORT}/api/v1/hello`);
+        debugHelper.debug(`🚀 Worker PID: ${process.pid} listening on http://localhost:${SERVER_PORT}/api/v1/system/hello`);
         debugHelper.debug(`🏥 Health Check: http://localhost:${SERVER_PORT}/api/v1/system/health`);
-        debugHelper.debug(`📂 DB Target   : ${dbEnv('DATABASE_NAME')} (${dbEnv('DATABASE_HOST')}) env=${DB_ENV}`);
+        const database = getDatabaseTarget();
+        debugHelper.debug(`DB Target   : ${database.database} (${database.host}:${database.port}) env=${DB_ENV}`);
         debugHelper.debug(`-----------------------------------------`);
     });
 
