@@ -3,6 +3,47 @@ import branchRepo from './branch.repository';
 import { Status } from '../../../../prisma/generated/prisma/client';
 import { prisma } from '../../../../lib/prisma';
 import stringHelper from '../../../core/helpers/string.helper';
+const resolveCuisineIds = async (tx, cuisines) => {
+    if (!Array.isArray(cuisines)) {
+        throw new Error("Cuisines must be an array");
+    }
+    const ids = [
+        ...new Set(cuisines
+            .filter(c => c.id)
+            .map(c => Number(c.id))
+            .filter(id => Number.isFinite(id)))
+    ];
+    const names = [
+        ...new Set(cuisines
+            .filter(c => !c.id && c.name)
+            .map(c => c.name.trim().toLowerCase())
+            .filter(Boolean))
+    ];
+    let existingIds = [];
+    if (ids.length > 0) {
+        const existing = await tx.cuisine.findMany({
+            where: { id: { in: ids } },
+            select: { id: true }
+        });
+        if (existing.length !== ids.length) {
+            throw new Error("Some cuisine IDs are invalid");
+        }
+        existingIds = existing.map(c => Number(c.id));
+    }
+    let createdIds = [];
+    if (names.length > 0) {
+        const created = await Promise.all(names.map(name => tx.cuisine.upsert({
+            where: { name },
+            update: {},
+            create: {
+                name: stringHelper.toTitleCase(name),
+                status: Status.PENDING
+            }
+        })));
+        createdIds = created.map(c => Number(c.id));
+    }
+    return [...new Set([...existingIds, ...createdIds])];
+};
 // =====================================================
 // ✅ CREATE BRANCH
 // =====================================================
@@ -53,55 +94,7 @@ export const createBranch = async (data) => {
                     contactPhone
                 }
             });
-            // ===============================================
-            // 2️⃣ PROCESS CUISINES (OPTIMIZED)
-            // ===============================================
-            // ✅ Safety check
-            if (!Array.isArray(cuisines)) {
-                throw new Error("Cuisines must be an array");
-            }
-            // 👉 Normalize + split
-            const ids = cuisines
-                .filter(c => c.id)
-                .map(c => Number(c.id));
-            const names = cuisines
-                .filter(c => !c.id && c.name)
-                .map(c => c.name.trim().toLowerCase());
-            // 👉 Remove duplicate names
-            const uniqueNames = [...new Set(names)];
-            // ===============================================
-            // 1️⃣ VALIDATE IDS (Single Query)
-            // ===============================================
-            let existingIds = [];
-            if (ids.length > 0) {
-                const existing = await tx.cuisine.findMany({
-                    where: { id: { in: ids } },
-                    select: { id: true }
-                });
-                if (existing.length !== ids.length) {
-                    throw new Error("Some cuisine IDs are invalid");
-                }
-                existingIds = existing.map(c => Number(c.id));
-            }
-            // ===============================================
-            // 2️⃣ UPSERT NAMES (Parallel)
-            // ===============================================
-            let createdIds = [];
-            if (uniqueNames.length > 0) {
-                const created = await Promise.all(uniqueNames.map(name => tx.cuisine.upsert({
-                    where: { name },
-                    update: {},
-                    create: {
-                        name: stringHelper.toTitleCase(name),
-                        status: Status.PENDING
-                    }
-                })));
-                createdIds = created.map(c => Number(c.id));
-            }
-            // ===============================================
-            // 3️⃣ MERGE ALL IDS
-            // ===============================================
-            const cuisineIds = [...existingIds, ...createdIds];
+            const cuisineIds = await resolveCuisineIds(tx, cuisines);
             // ===============================================
             // 4️⃣ CREATE MAPPING
             // ===============================================
@@ -248,17 +241,37 @@ export const updateBranch = async (id, data) => {
                 message: 'Branch not found'
             };
         }
-        const response = await branchRepo.update(Number(id), data);
-        if (!response.status) {
-            return {
-                status: false,
-                message: response.message || 'Failed to update branch'
-            };
-        }
+        const { cuisines, ...branchData } = data;
+        const updatedBranch = await prisma.$transaction(async (tx) => {
+            const branch = Object.keys(branchData).length > 0
+                ? await tx.branch.update({
+                    where: { id },
+                    data: branchData
+                })
+                : await tx.branch.findUnique({
+                    where: { id }
+                });
+            if (cuisines !== undefined) {
+                const cuisineIds = await resolveCuisineIds(tx, cuisines);
+                await tx.branchCuisine.deleteMany({
+                    where: { branchId: id }
+                });
+                if (cuisineIds.length > 0) {
+                    await tx.branchCuisine.createMany({
+                        data: cuisineIds.map(cid => ({
+                            branchId: id,
+                            cuisineId: cid
+                        })),
+                        skipDuplicates: true
+                    });
+                }
+            }
+            return branch;
+        });
         return {
             status: true,
             message: 'Branch updated successfully',
-            data: response.data
+            data: stringHelper.convertBigInt(updatedBranch, "number")
         };
     }
     catch (error) {

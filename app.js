@@ -2717,6 +2717,49 @@ var branchRepo = {
 var branch_repository_default = branchRepo;
 
 // src/modules/kitchen/branch/branch.service.ts
+var resolveCuisineIds = async (tx, cuisines) => {
+  if (!Array.isArray(cuisines)) {
+    throw new Error("Cuisines must be an array");
+  }
+  const ids = [
+    ...new Set(
+      cuisines.filter((c) => c.id).map((c) => Number(c.id)).filter((id) => Number.isFinite(id))
+    )
+  ];
+  const names = [
+    ...new Set(
+      cuisines.filter((c) => !c.id && c.name).map((c) => c.name.trim().toLowerCase()).filter(Boolean)
+    )
+  ];
+  let existingIds = [];
+  if (ids.length > 0) {
+    const existing = await tx.cuisine.findMany({
+      where: { id: { in: ids } },
+      select: { id: true }
+    });
+    if (existing.length !== ids.length) {
+      throw new Error("Some cuisine IDs are invalid");
+    }
+    existingIds = existing.map((c) => Number(c.id));
+  }
+  let createdIds = [];
+  if (names.length > 0) {
+    const created = await Promise.all(
+      names.map(
+        (name) => tx.cuisine.upsert({
+          where: { name },
+          update: {},
+          create: {
+            name: string_helper_default.toTitleCase(name),
+            status: Status.PENDING
+          }
+        })
+      )
+    );
+    createdIds = created.map((c) => Number(c.id));
+  }
+  return [.../* @__PURE__ */ new Set([...existingIds, ...createdIds])];
+};
 var createBranch = async (data) => {
   const { kitchenId, name, addressLine1, addressLine2, landmark, area, pincode, countryId, stateId, cityId, contactTitle, contactFirstName, contactLastName, contactEmail, contactPhone, cuisines } = data;
   debug_default.debug("[Branch Service] Saving new branch to database...");
@@ -2758,40 +2801,7 @@ var createBranch = async (data) => {
           contactPhone
         }
       });
-      if (!Array.isArray(cuisines)) {
-        throw new Error("Cuisines must be an array");
-      }
-      const ids = cuisines.filter((c) => c.id).map((c) => Number(c.id));
-      const names = cuisines.filter((c) => !c.id && c.name).map((c) => c.name.trim().toLowerCase());
-      const uniqueNames = [...new Set(names)];
-      let existingIds = [];
-      if (ids.length > 0) {
-        const existing = await tx.cuisine.findMany({
-          where: { id: { in: ids } },
-          select: { id: true }
-        });
-        if (existing.length !== ids.length) {
-          throw new Error("Some cuisine IDs are invalid");
-        }
-        existingIds = existing.map((c) => Number(c.id));
-      }
-      let createdIds = [];
-      if (uniqueNames.length > 0) {
-        const created = await Promise.all(
-          uniqueNames.map(
-            (name2) => tx.cuisine.upsert({
-              where: { name: name2 },
-              update: {},
-              create: {
-                name: string_helper_default.toTitleCase(name2),
-                status: Status.PENDING
-              }
-            })
-          )
-        );
-        createdIds = created.map((c) => Number(c.id));
-      }
-      const cuisineIds = [...existingIds, ...createdIds];
+      const cuisineIds = await resolveCuisineIds(tx, cuisines);
       if (cuisineIds.length > 0) {
         await tx.branchCuisine.createMany({
           data: cuisineIds.map((cid) => ({
@@ -2920,17 +2930,35 @@ var updateBranch = async (id, data) => {
         message: "Branch not found"
       };
     }
-    const response = await branch_repository_default.update(Number(id), data);
-    if (!response.status) {
-      return {
-        status: false,
-        message: response.message || "Failed to update branch"
-      };
-    }
+    const { cuisines, ...branchData } = data;
+    const updatedBranch = await prisma.$transaction(async (tx) => {
+      const branch = Object.keys(branchData).length > 0 ? await tx.branch.update({
+        where: { id },
+        data: branchData
+      }) : await tx.branch.findUnique({
+        where: { id }
+      });
+      if (cuisines !== void 0) {
+        const cuisineIds = await resolveCuisineIds(tx, cuisines);
+        await tx.branchCuisine.deleteMany({
+          where: { branchId: id }
+        });
+        if (cuisineIds.length > 0) {
+          await tx.branchCuisine.createMany({
+            data: cuisineIds.map((cid) => ({
+              branchId: id,
+              cuisineId: cid
+            })),
+            skipDuplicates: true
+          });
+        }
+      }
+      return branch;
+    });
     return {
       status: true,
       message: "Branch updated successfully",
-      data: response.data
+      data: string_helper_default.convertBigInt(updatedBranch, "number")
     };
   } catch (error) {
     debug_default.debugError(`[Branch Service] updateBranch failed: ${error.message}`);
